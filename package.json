@@ -4,7 +4,7 @@
   "description": "Rest API CRUD works",
   "main": "index.js",
   "scripts": {
-    "start": "npx ts-node index.ts",
+    "start": "nodemon --exec ts-node index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "ayse.yildiz",
@@ -24,6 +24,7 @@
     "@types/express": "^5.0.1",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^22.13.11",
+    "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.2"
   }

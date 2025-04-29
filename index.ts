@@ -12,6 +12,7 @@ import { z } from "zod";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+
 config();
 
 // Initialize Knex with SQLitegit
@@ -164,6 +165,23 @@ app.get("/items/:id", async (req, res) => {
     }
 });
 
+app.get("/users", async (req, res) => {
+    const users = await db("users").select("id", "username").orderBy("id","asc");
+    res.json(users);
+});
+
+// Protected User Profile (Just an example)
+app.get("/profile", async (req: any, res) => {
+    const userId = req.user.userId;
+    // Fetch the user's profile data
+    const user = await db("users").where({ id: userId }).first();
+    if (user) {
+        res.json({ username: user.username });
+    } else {
+        res.status(404).json({ message: "User not found" });
+    }
+});
+
 // @ts-ignore
 app.post("/items", async (req, res) => {
     const parsed = itemSchema.safeParse(req.body);
@@ -205,19 +223,6 @@ app.delete("/items/:id", async (req, res) => {
 
     await db("items").where({ id }).del();
     res.json({ message: "Item deleted" });
-});
-
-// Protected User Profile (Just an example)
-app.get("/profile", async (req: any, res) => {
-    const userId = req.user.userId;
-
-    // Fetch the user's profile data
-    const user = await db("users").where({ id: userId }).first();
-    if (user) {
-        res.json({ username: user.username });
-    } else {
-        res.status(404).json({ message: "User not found" });
-    }
 });
 
 const PORT = process.env.PORT || 3000;
